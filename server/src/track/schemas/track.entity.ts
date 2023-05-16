@@ -15,15 +15,15 @@ export class TrackSchema {
     @Column()
     description: string;
 
-    @Column()
+    @Column({default: 0})
     listens: number;
 
-    @Column()
+    @Column({nullable: true})
     image: string;
 
-    @Column()
+    @Column({nullable: true})
     audio: string;
 
-    @OneToMany(type => CommentSchema, schema => schema.track_id)
+    @OneToMany(() => CommentSchema, schema => schema.trackId)
     comments: CommentSchema[]
 }
