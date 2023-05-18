@@ -1,7 +1,10 @@
-import {Body, Controller, Delete, Get, Param, Post, Res} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFiles, UseInterceptors} from "@nestjs/common";
 import {TrackService} from "./track.service";
 import {CreateTrackDto} from "./dto/create-track.dto";
 import {CreateTrackCommentDto} from "./dto/create-comment.dto";
+import {FileFieldsInterceptor} from "@nestjs/platform-express";
+import {FileService, FileType} from "../file/file.service";
+
 
 @Controller('/track')
 export class TrackController {
@@ -9,17 +12,22 @@ export class TrackController {
     }
 
     @Post()
-    async create(@Body() dto: CreateTrackDto) {
-        return await this.trackService.createTrack(dto)
+    @UseInterceptors(FileFieldsInterceptor([
+            {name: 'audio', maxCount: 1},
+            {name: 'image', maxCount: 1},
+        ]))
+    async create(@Body() dto: CreateTrackDto, @UploadedFiles() files) {
+        return await this.trackService.createTrack(dto, files.image[0], files.audio[0])
     }
 
     @Get()
-    async getAllTracks() {
-        return await this.trackService.getAllTracks();
+    async getAllTracks(@Query('count') count,
+                       @Query('offset') offset) {
+        return await this.trackService.getAllTracks(count, offset);
     }
 
     @Get(':id')
-    async getOnTrack(@Param('id') id) {
+    async getOneTrack(@Param('id') id) {
         return await this.trackService.getOneTrack(id);
     }
 
@@ -33,5 +41,16 @@ export class TrackController {
     async addTrackComment(@Body() dto: CreateTrackCommentDto) {
         return await this.trackService.addTrackComment(dto);
     }
+
+    @Put('/listens/:id')
+    async incrementTrackListen(@Param('id') id) {
+        return await this.trackService.incrementTrackListen(id)
+    }
+
+    @Get()
+    async searchTracks(@Query('search') searchArgs) {
+        return await this.trackService.getAllTracks(searchArgs);
+    }
+
 
 }

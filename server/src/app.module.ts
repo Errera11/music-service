@@ -1,13 +1,18 @@
 import {Module} from "@nestjs/common";
 import {TypeOrmModule} from "@nestjs/typeorm";
-import * as process from "process";
+import * as path from "path";
 import {TrackModule} from "./track/track.module";
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import {CommentSchema} from "./track/schemas/comment.entity";
 import {TrackSchema} from "./track/schemas/track.entity";
+import {FileModule} from "./file/file.module";
+import {ServeStaticModule} from "@nestjs/serve-static";
 
 @Module({
     imports: [
+        ServeStaticModule.forRoot({
+            rootPath: path.resolve(__dirname, 'static'),
+        }),
         ConfigModule.forRoot({
             envFilePath: '../.env'
         }),
@@ -26,6 +31,7 @@ import {TrackSchema} from "./track/schemas/track.entity";
             }),
         }),
         TrackModule,
+        FileModule
     ]
 })
 export class AppModule {};

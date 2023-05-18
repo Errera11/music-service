@@ -18,10 +18,10 @@ export class TrackSchema {
     @Column({default: 0})
     listens: number;
 
-    @Column({nullable: true})
+    @Column()
     image: string;
 
-    @Column({nullable: true})
+    @Column()
     audio: string;
 
     @OneToMany(() => CommentSchema, schema => schema.trackId)
