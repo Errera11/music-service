@@ -1,0 +1,54 @@
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.stepper {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  width: 100%;
+  .item {
+    display: flex;
+    align-items: center;
+
+    .line {
+      border: solid gray 0.5px;
+      border-radius: 5px;
+      margin-left: 10px;
+      width: 300px;
+    }
+    .number {
+      padding: 13px;
+      background: red;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      margin: 10px;
+    }
+    .active {
+      background: limegreen;
+    }
+    .current {
+      background: yellow;
+    }
+    .text {
+      white-space: nowrap;
+    }
+  }
+}
+
+.children {
+  display: flex;
+  justify-content: center;
+  margin: 50px;
+  padding: 50px;
+  align-items: center;
+  width: 70%;
+  background: floralwhite;
+  box-shadow: 2px 2px 5px ;
+}

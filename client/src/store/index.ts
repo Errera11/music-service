@@ -1,4 +1,4 @@
-import {createStore} from 'redux';
+import {createStore, Store} from 'redux';
 import {createWrapper, Context, HYDRATE, MakeStore} from 'next-redux-wrapper';
 import {reducer, State} from "@/store/reducer";
 
@@ -7,4 +7,4 @@ const makeStore = (context: Context) => createStore(reducer);
 
 // export an assembled wrapper
 export const wrapper
-    = createWrapper(makeStore, {debug: true});
+    = createWrapper<Store<State>>(makeStore, {debug: true});

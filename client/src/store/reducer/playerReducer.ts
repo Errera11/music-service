@@ -1,6 +1,4 @@
 import {ActionType, IPlayerState, PlayerActionTypes} from "@/types/player";
-import {HYDRATE} from "next-redux-wrapper";
-
 
 const initialState: IPlayerState = {
     activeTrack: null,
