@@ -1,0 +1,46 @@
+.container {
+  margin: 70px 100px;
+  font-size: 1em;
+  button {
+    font-size: 1.5em;
+    margin: 15px 0px;
+    padding: 15px;
+    background: none;
+    border-radius: 15px;
+    border: gray solid 1px;
+    cursor: pointer;
+  }
+  .comment {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    font-size: 2em;
+    * {
+      margin: 5px 0px;
+      font-size: 0.5em;
+    }
+    input {
+      padding: 5px;
+      border-radius: 15px;
+      border: gray solid 1px;
+      background: none;
+    }
+  }
+  .description {
+    margin: 20px 0px;
+  }
+}
+
+.head {
+  display: flex;
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+  .info {
+    font-size: 3em;
+    margin-left: 50px;
+    margin-bottom: 20px;
+  }
+
+}

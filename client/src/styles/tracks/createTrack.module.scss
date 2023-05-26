@@ -1,0 +1,19 @@
+
+.btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.stepOne  {
+  h3 {
+    text-align: center;
+  }
+  input {
+    margin: 15px 10px;
+    width: 100%;
+    height: 30%;
+    padding: 15px;
+    border-radius: 15px;
+    border: none;
+  }
+}
