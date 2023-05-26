@@ -4,6 +4,8 @@ import styles from '../../styles/tracks/tracks.module.css'
 import {useRouter} from "next/router";
 import {ITrack} from "@/types/track";
 import TrackItem from "@/components/TrackItem";
+import {useActions} from "@/hooks/useActions";
+import {useTypedSelector} from "@/hooks/useTypedSelector";
 
 const TrackMock: ITrack[] = [
     {
@@ -46,6 +48,9 @@ const TrackMock: ITrack[] = [
 
 const Tracks = () => {
     const router = useRouter()
+    const {setTrackAC, playerPlayAC, playerStopAC} = useActions()
+    const isPlay=false;
+
     return (
         <>
             <Layout>
@@ -61,6 +66,10 @@ const Tracks = () => {
                                 <TrackItem
                                     key={item.id}
                                     track={item}
+                                    setTrack={(trackItem: ITrack) => setTrackAC(trackItem)}
+                                    playerPlay={playerPlayAC}
+                                    playerStop={playerStopAC}
+                                    isActive={isPlay}
                                 />
                             ))}
                     </div>
