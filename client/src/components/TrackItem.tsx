@@ -1,4 +1,4 @@
-import React, {MouseEventHandler} from 'react';
+import React, {MouseEventHandler, useState} from 'react';
 import {ITrack} from "@/types/track";
 import styles from '../styles/tracks/trackItem.module.css'
 import pausePlayer from '../assets/pausePlayer.png'
@@ -27,10 +27,9 @@ const TrackItem: React.FC<TrackItem> = ({isActive,
         else {
             setTrack(track)
             playerPlay()
-
         }
-        console.log(isActive);
     }
+
     return (
         <div className={styles.container} onClick={() => router.push('/track/' + track.id)}>
             <div>
@@ -42,14 +41,13 @@ const TrackItem: React.FC<TrackItem> = ({isActive,
                             <img src={startPlayer.src}/>
                         }
                     </div>
-                    <img className={styles.image} src={track.image}/>
+                    <img className={styles.image} src={process.env.NEXT_PUBLIC_API_URL as string + '/' +  track.image}/>
                 </div>
                 <div className={styles.info}>
                     <div className={styles.title}>{track.name}</div>
                     <div className={styles.name}>{track.artist}</div>
                 </div>
             </div>
-            <div className={styles.timeline}>02:32 / 02:50</div>
         </div>
     );
 };

@@ -6,50 +6,14 @@ import {ITrack} from "@/types/track";
 import TrackItem from "@/components/TrackItem";
 import {useActions} from "@/hooks/useActions";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
-
-const TrackMock: ITrack[] = [
-    {
-        id: 1,
-        artist: 'artis',
-        description: 'this is desc',
-        image: 'https://images.hdqwalls.com/wallpapers/thumb/justice-league-zack-synder-4k-jc.jpg',
-        name: 'name',
-        listens: 123,
-        audio: 'em'
-    },
-    {
-        id: 2,
-        artist: 'artis',
-        description: 'this is desc',
-        image: 'https://images.hdqwalls.com/wallpapers/thumb/justice-league-zack-synder-4k-jc.jpg',
-        name: 'name',
-        listens: 123,
-        audio: 'em'
-    },
-    {
-        id: 3,
-        artist: 'artis',
-        description: 'this is desc',
-        image: 'https://images.hdqwalls.com/wallpapers/thumb/justice-league-zack-synder-4k-jc.jpg',
-        name: 'name',
-        listens: 123,
-        audio: 'em'
-    },
-    {
-        id: 4,
-        artist: 'artis',
-        description: 'this is desc',
-        image: 'https://images.hdqwalls.com/wallpapers/thumb/justice-league-zack-synder-4k-jc.jpg',
-        name: 'name',
-        listens: 123,
-        audio: 'em'
-    }
-]
+import {NextDispatch, wrapper} from "@/store";
+import {fetchTracks} from "@/store/action/tracksAC";
 
 const Tracks = () => {
     const router = useRouter()
     const {setTrackAC, playerPlayAC, playerStopAC} = useActions()
-    const isPlay=false;
+    const {activeTrack, isPlay} = useTypedSelector(state => state.player);
+    const {tracksList} = useTypedSelector(state => state.tracks);
 
     return (
         <>
@@ -62,16 +26,18 @@ const Tracks = () => {
                         </button>
                     </div>
                     <div className={styles.tracks}>
-                            {TrackMock.map(item => (
-                                <TrackItem
-                                    key={item.id}
-                                    track={item}
-                                    setTrack={(trackItem: ITrack) => setTrackAC(trackItem)}
-                                    playerPlay={playerPlayAC}
-                                    playerStop={playerStopAC}
-                                    isActive={isPlay}
-                                />
-                            ))}
+                        {tracksList[0]?.map(item => (
+                            <TrackItem
+                                key={item.id}
+                                track={item}
+                                setTrack={(trackItem: ITrack) => setTrackAC(trackItem)}
+                                playerPlay={playerPlayAC}
+                                playerStop={playerStopAC}
+                                isActive={item.id == activeTrack?.id
+                                    &&
+                                    isPlay}
+                            />
+                        ))}
                     </div>
                 </div>
             </Layout>
@@ -80,3 +46,13 @@ const Tracks = () => {
 };
 
 export default Tracks;
+
+// @ts-ignore
+export const getServerSideProps
+    = wrapper.getServerSideProps(
+    (store) =>
+        async (x) => {
+            const NextThunkDispatch = store.dispatch as NextDispatch;
+            await NextThunkDispatch(await fetchTracks())
+        })
+

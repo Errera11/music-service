@@ -21,7 +21,7 @@ export const playerReducer = (state: IPlayerState = initialState, action: Action
         case PlayerActionTypes.SET_DURATION:
             return {...state, duration: action.payload}
         case PlayerActionTypes.SET_TRACK:
-            return {...state, activeTrack: action.payload}
+            return {...state, activeTrack: action.payload, currentTime: 0}
         default:
             return state
     }

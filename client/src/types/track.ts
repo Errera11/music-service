@@ -14,3 +14,25 @@ export interface ITrack {
     image: string
     audio: string
 }
+
+export interface ITracksState {
+    tracksList: ITrack[]
+    error: string
+}
+
+export enum TracksActionTypes {
+    SET_TRACKS = 'SET_TRACKS',
+    SET_ERROR = 'SET_ERROR'
+}
+
+export interface SetTracksAction {
+    type: TracksActionTypes.SET_TRACKS
+    payload: ITrack[]
+}
+
+export interface SetErrorAction {
+    type: TracksActionTypes.SET_ERROR
+    payload: string
+}
+
+export type TrackActions = SetTracksAction | SetErrorAction

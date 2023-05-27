@@ -2,9 +2,11 @@ import {playerReducer} from "@/store/reducer/playerReducer";
 import {combineReducers} from "redux";
 import {HYDRATE} from "next-redux-wrapper";
 import {IPlayerState} from "@/types/player";
+import {tracksReducer} from "@/store/reducer/tracksReducer";
 
 const rootReducer = combineReducers({
-    player: playerReducer
+    player: playerReducer,
+    tracks: tracksReducer
 })
 
 export const reducer = (state: any, action: any): State => {
@@ -13,7 +15,7 @@ export const reducer = (state: any, action: any): State => {
             ...state,
             ...action.payload
         }
-        if (state.count) nextState.count = state.count; // preserve count value on client side navigation
+        if (state.count) nextState.count = state.count;
         return nextState;
     } else {
         return rootReducer(state, action);
