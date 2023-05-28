@@ -11,6 +11,10 @@
     cursor: pointer;
   }
   .comment {
+    border: solid gray 2px;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 10px 0px;
     display: flex;
     flex-direction: column;
     width: 400px;
@@ -29,6 +33,10 @@
   .description {
     margin: 20px 0px;
   }
+  .commentList {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .head {
@@ -41,6 +49,17 @@
     font-size: 3em;
     margin-left: 50px;
     margin-bottom: 20px;
+  }
+
+}
+
+.trackImage {
+
+  object-fit: cover;
+  img {
+    object-fit: cover;
+    width: 250px;
+    height: 300px;
   }
 
 }
