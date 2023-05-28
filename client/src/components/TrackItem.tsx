@@ -4,7 +4,7 @@ import styles from '../styles/tracks/trackItem.module.css'
 import pausePlayer from '../assets/pausePlayer.png'
 import startPlayer from '../assets/startPlayer.png'
 import {useRouter} from "next/router";
-import {useActions} from "@/hooks/useActions";
+import {usePlayerActions} from "@/hooks/usePlayerActions";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
 
 interface TrackItem {
@@ -48,6 +48,7 @@ const TrackItem: React.FC<TrackItem> = ({isActive,
                     <div className={styles.name}>{track.artist}</div>
                 </div>
             </div>
+
         </div>
     );
 };

@@ -62,7 +62,8 @@ export class TrackService {
 
     searchTracks(searchArgs): Promise<TrackSchema[]> {
         return this.trackRepository.createQueryBuilder('track')
-            .where('track.name = :searchArgs', {searchArgs})
+            .where('track.name like :searchArgs', {searchArgs: `%${searchArgs}%`
+    })
             .getMany();
 
     }

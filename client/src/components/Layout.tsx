@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from "@/components/Navbar";
 import Player from "@/components/Player";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
-import {useActions} from "@/hooks/useActions";
+import {usePlayerActions} from "@/hooks/usePlayerActions";
 import {ITrack} from "@/types/track";
 
 const Layout = ({children}: any) => {
@@ -22,7 +22,7 @@ const Layout = ({children}: any) => {
         setVolumeAC,
         setDurationAC,
         setCurrentTimeAC
-    } = useActions()
+    } = usePlayerActions()
 
     return (
         <>

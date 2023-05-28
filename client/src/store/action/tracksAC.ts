@@ -14,7 +14,7 @@ export const fetchTracks = () => {
     return async (dispatch: Dispatch<TrackActions>)=> {
         try {
             const {data} = await axios.get(process.env.NEXT_PUBLIC_GET_TRACKS as string)
-            dispatch(setTracksAC(JSON.parse(JSON.stringify(data))))
+            dispatch(setTracksAC(JSON.parse(JSON.stringify(data[0]))))
         } catch (e) {
             dispatch(setErrorAC(e as string))
         }

@@ -13,16 +13,18 @@ export class TrackController {
 
     @Post()
     @UseInterceptors(FileFieldsInterceptor([
-            {name: 'audio', maxCount: 1},
-            {name: 'image', maxCount: 1},
-        ]))
+        {name: 'audio', maxCount: 1},
+        {name: 'image', maxCount: 1},
+    ]))
     async create(@Body() dto: CreateTrackDto, @UploadedFiles() files) {
         return await this.trackService.createTrack(dto, files.image[0], files.audio[0])
     }
 
     @Get()
     async getAllTracks(@Query('count') count,
-                       @Query('offset') offset) {
+                       @Query('offset') offset,
+                       @Query('search') searchArgs) {
+        if(searchArgs) return await this.trackService.searchTracks(searchArgs);
         return await this.trackService.getAllTracks(count, offset);
     }
 
@@ -45,11 +47,6 @@ export class TrackController {
     @Put('/listens/:id')
     async incrementTrackListen(@Param('id') id) {
         return await this.trackService.incrementTrackListen(id)
-    }
-
-    @Get()
-    async searchTracks(@Query('search') searchArgs) {
-        return await this.trackService.getAllTracks(searchArgs);
     }
 
 
