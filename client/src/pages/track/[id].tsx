@@ -5,9 +5,8 @@ import styles from '../../styles/tracks/trackPage.module.scss'
 import axios from "axios";
 import {IComment} from "@/types/track";
 import CommentItem from "@/components/CommentItem";
-import {rotate} from "next/dist/server/lib/squoosh/impl";
-
-;
+import {GetServerSideProps} from "next";
+import {Context} from "next-redux-wrapper";
 
 interface IServerTrack {
     "id": number
@@ -42,7 +41,7 @@ const TrackPage = ({track}: {track: IServerTrack} ) => {
     }
 
     return (
-        <Layout>
+        <Layout title={`${track.name} ${track.artist}`}>
             <div className={styles.container}>
                 <button onClick={() => router.push('/track/tracks')}>To list </button>
                 <div className={styles.head}>
@@ -86,7 +85,7 @@ const TrackPage = ({track}: {track: IServerTrack} ) => {
     );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<Context> = async (context) => {
     const {data: track} = await axios.get(process.env.NEXT_PUBLIC_GET_TRACKS + '/' +  context.params.id)
     return {
         props: {track}

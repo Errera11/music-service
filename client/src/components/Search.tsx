@@ -8,12 +8,12 @@ interface IProps {
 
 let timer: Function | null = null;
 const Search: React.FC<IProps> = ({search}) => {
-    const [value, setValue] = useState('')
+    const [value, setValue] = useState<string>()
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value)
-        if(timer) clearTimeout(timer)
-        if(value) timer = setTimeout(() => search(value), 1000)
-        else clearTimeout(timer)
+        setValue(e.target.value);
+        if(timer) clearTimeout(timer);
+        if(value) timer = setTimeout(() => search(value), 1000);
+        else clearTimeout(timer);
 
     }
     return (

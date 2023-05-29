@@ -1,6 +1,8 @@
 import {ITrack, SetErrorAction, SetTracksAction, TrackActions, TracksActionTypes} from "@/types/track";
 import {Dispatch} from "react";
 import axios from "axios";
+import {useDispatch} from "react-redux";
+import {NextDispatch} from "@/store";
 
 export const setTracksAC = (payload: ITrack[]) : SetTracksAction => {
     return {payload, type: TracksActionTypes.SET_TRACKS}
@@ -18,5 +20,20 @@ export const fetchTracks = () => {
         } catch (e) {
             dispatch(setErrorAC(e as string))
         }
+    }
+}
+
+export const searchTracks = (searchQuery: string) => {
+    try {
+        return async (dispatch: Dispatch<TrackActions>) => {
+            const {data} = await axios.get(`${process.env.NEXT_PUBLIC_GET_TRACKS}`, {
+                params: {
+                    search: searchQuery
+                }
+            })
+            dispatch(setTracksAC(data))
+        }
+    } catch(e) {
+        console.log(e);
     }
 }

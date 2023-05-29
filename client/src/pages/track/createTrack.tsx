@@ -18,7 +18,7 @@ const CreateTrack = () => {
         if (activeStep > 0) setActiveStep(prev => prev -= 1)
     }
     const forwardStep = () => {
-        if(!artist || !title || !description) return setStepError(true)
+        if (!artist || !title || !description) return setStepError(true)
         if (activeStep < 2) {
             setActiveStep(prev => prev += 1)
             setStepError(false)
@@ -29,18 +29,19 @@ const CreateTrack = () => {
             formData.append('description', description)
             formData.append('image', image)
             formData.append('audio', audio)
-            axios.post(process.env.NEXT_PUBLIC_GET_TRACKS, formData)
+            axios.post(process.env.NEXT_PUBLIC_GET_TRACKS as string, formData)
                 .then(res => setActiveStep(prev => prev += 1))
                 .catch(err => console.log(err))
         }
     }
 
     return (
-        <Layout>
-            <Stepper activeStep={activeStep}>
-                <div>
-                    {activeStep == 0 && <div className={styles.stepOne}>
-                        <h3>Step One</h3>
+        <Layout title={'Create Track'}>
+            <>
+                <Stepper activeStep={activeStep}>
+                    <div>
+                        {activeStep == 0 && <div className={styles.stepOne}>
+                            <h3>Step One</h3>
                             <input
                                 onChange={e => setTitle(e.target.value)}
                                 value={title}
@@ -59,29 +60,33 @@ const CreateTrack = () => {
                                 type={'text'} placeholder={'Text description'}
                                 style={!description && stepError ? {border: 'solid red 2px', borderRadius: '15px'} : {}}
                             />
-                    </div>}
-                    {activeStep == 1 && <div className={styles.stepTwo}>
-                        <h3>Step Two</h3>
-                        <FileUpload setFile={setImage} accept={'image/*'}><div>Image Upload</div></FileUpload>
-                        {image && <div>{image.name}</div>}
-                    </div>}
-                    {activeStep == 2 && <div className={styles.stepThree}>
-                        <h3>Step Three</h3>
-                        <FileUpload setFile={setAudio} accept={'audio/*'}><div>Audio Upload</div></FileUpload>
-                        {audio && <div>{audio.name}</div>}
-                    </div>}
-                    {activeStep == 3 && <div className={styles.stepFinal}>
-                        <h3>Your track submitted!</h3>
-                    </div>}
-                </div>
-            </Stepper>
-            {activeStep != 3 &&
-            <div className={styles.btns}>
-                <Button onClick={backStep}>Back</Button>
-                <Button onClick={forwardStep}>Next</Button>
-            </div>
-            }
-
+                        </div>}
+                        {activeStep == 1 && <div className={styles.stepTwo}>
+                            <h3>Step Two</h3>
+                            <FileUpload setFile={setImage} accept={'image/*'}>
+                                <div>Image Upload</div>
+                            </FileUpload>
+                            {image && <div>{image.name}</div>}
+                        </div>}
+                        {activeStep == 2 && <div className={styles.stepThree}>
+                            <h3>Step Three</h3>
+                            <FileUpload setFile={setAudio} accept={'audio/*'}>
+                                <div>Audio Upload</div>
+                            </FileUpload>
+                            {audio && <div>{audio?.name}</div>}
+                        </div>}
+                        {activeStep == 3 && <div className={styles.stepFinal}>
+                            <h3>Your track submitted!</h3>
+                        </div>}
+                    </div>
+                </Stepper>
+                {activeStep != 3 &&
+                    <div className={styles.btns}>
+                        <Button onClick={backStep}>Back</Button>
+                        <Button onClick={forwardStep}>Next</Button>
+                    </div>
+                }
+            </>
         </Layout>
     )
         ;

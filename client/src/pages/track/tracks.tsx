@@ -7,23 +7,23 @@ import TrackItem from "@/components/TrackItem";
 import {usePlayerActions} from "@/hooks/usePlayerActions";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
 import {NextDispatch, wrapper} from "@/store";
-import {fetchTracks, setTracksAC} from "@/store/action/tracksAC";
+import {fetchTracks, searchTracks} from "@/store/action/tracksAC";
 import Search from "@/components/Search";
 import axios from "axios";
 import {useTracksActions} from "@/hooks/useTracksActions";
+import {useDispatch} from "react-redux";
+
 
 const Tracks = () => {
     const router = useRouter()
     const {setTrackAC, playerPlayAC, playerStopAC} = usePlayerActions()
     const {activeTrack, isPlay} = useTypedSelector(state => state.player);
     const {tracksList} = useTypedSelector(state => state.tracks);
-    const {setTracksAC} = useTracksActions();
+    const dispatch = useDispatch() as NextDispatch;
     const search = async (searchQuery: string) => {
         try {
-            const {data} = await axios.get(`${process.env.NEXT_PUBLIC_GET_TRACKS}`, {params: {
-                search: searchQuery
-                }})
-            setTracksAC(data)
+            console.log(searchQuery);
+            await dispatch(await searchTracks(searchQuery))
         } catch (e) {
             console.log(e);
         }
@@ -31,30 +31,33 @@ const Tracks = () => {
 
     return (
         <>
-            <Layout>
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 0px'}}><Search search={search}/></div>
-                <div className={styles.container}>
-                    <div>
-                        <div className={styles.title}>My Tracks</div>
-                        <button onClick={() => router.push('/track/createTrack')}
-                                className={styles.download}>Download
-                        </button>
+            <Layout title={'Tracks List'}>
+                <>
+                    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 0px'}}>
+                        <Search search={search}/></div>
+                    <div className={styles.container}>
+                        <div>
+                            <div className={styles.title}>My Tracks</div>
+                            <button onClick={() => router.push('/track/createTrack')}
+                                    className={styles.download}>Download
+                            </button>
+                        </div>
+                        <div className={styles.tracks}>
+                            {tracksList?.map(item => (
+                                <TrackItem
+                                    key={item.id}
+                                    track={item}
+                                    setTrack={(trackItem: ITrack) => setTrackAC(trackItem)}
+                                    playerPlay={playerPlayAC}
+                                    playerStop={playerStopAC}
+                                    isActive={item.id == activeTrack?.id
+                                        &&
+                                        isPlay}
+                                />
+                            ))}
+                        </div>
                     </div>
-                    <div className={styles.tracks}>
-                        {tracksList?.map(item => (
-                            <TrackItem
-                                key={item.id}
-                                track={item}
-                                setTrack={(trackItem: ITrack) => setTrackAC(trackItem)}
-                                playerPlay={playerPlayAC}
-                                playerStop={playerStopAC}
-                                isActive={item.id == activeTrack?.id
-                                    &&
-                                    isPlay}
-                            />
-                        ))}
-                    </div>
-                </div>
+                </>
             </Layout>
         </>
     );
