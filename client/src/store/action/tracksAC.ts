@@ -31,7 +31,7 @@ export const searchTracks = (searchQuery: string) => {
                     search: searchQuery
                 }
             })
-            dispatch(setTracksAC(data))
+            dispatch(setTracksAC(data[0]))
         }
     } catch(e) {
         console.log(e);

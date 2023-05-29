@@ -1,16 +1,14 @@
-import React, {useState} from 'react';
+import React, {Dispatch, useState} from 'react';
 import Layout from "@/components/Layout";
 import styles from '../../styles/tracks/tracks.module.css'
 import {useRouter} from "next/router";
-import {ITrack} from "@/types/track";
+import {ITrack, TrackActions} from "@/types/track";
 import TrackItem from "@/components/TrackItem";
 import {usePlayerActions} from "@/hooks/usePlayerActions";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
 import {NextDispatch, wrapper} from "@/store";
 import {fetchTracks, searchTracks} from "@/store/action/tracksAC";
 import Search from "@/components/Search";
-import axios from "axios";
-import {useTracksActions} from "@/hooks/useTracksActions";
 import {useDispatch} from "react-redux";
 
 
@@ -20,9 +18,9 @@ const Tracks = () => {
     const {activeTrack, isPlay} = useTypedSelector(state => state.player);
     const {tracksList} = useTypedSelector(state => state.tracks);
     const dispatch = useDispatch() as NextDispatch;
+    console.log(tracksList);
     const search = async (searchQuery: string) => {
         try {
-            console.log(searchQuery);
             await dispatch(await searchTracks(searchQuery))
         } catch (e) {
             console.log(e);
