@@ -5,6 +5,7 @@ import startButton from '../assets/startPlayer.png'
 import volumeImg from '../assets/volume.png'
 import {useTypedSelector} from "@/hooks/useTypedSelector";
 import {usePlayerActions} from "@/hooks/usePlayerActions";
+import axios from "axios";
 
 let audio: HTMLAudioElement;
 
@@ -46,12 +47,17 @@ const Player: React.FC = () => {
         if (track) {
             audio.src = process.env.NEXT_PUBLIC_API_URL + '/' + track.audio;
             audio.currentTime = currentTime;
-            audio.onloadedmetadata = () => setDurationAC(audio.duration)
-            audio.ontimeupdate = () => {
-                setCurrentTimeAC(audio.currentTime)
+            audio.onloadedmetadata = () => {
+                setDurationAC(audio.duration)
+                if(Math.ceil(currentTime) == Math.ceil(duration)) {
+                    axios.put(`${process.env.NEXT_PUBLIC_API_URL}track/listens/${track.id}`)
+                }
+                audio.ontimeupdate = () => {
+                    setCurrentTimeAC(audio.currentTime)
+                }
+                audio.volume = volume / 100;
+                audio.play()
             }
-            audio.volume = volume / 100;
-            audio.play()
         }
     }
 
