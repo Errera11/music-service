@@ -3,6 +3,7 @@ import {useRouter} from "next/router";
 
 const Navbar = () => {
     const router = useRouter()
+
     return (
         <div className={'container'}>
             <div className={'links'}>

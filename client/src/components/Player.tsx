@@ -3,67 +3,74 @@ import styles from '../styles/components/Player.module.scss'
 import pauseButton from '../assets/pausePlayer.png'
 import startButton from '../assets/startPlayer.png'
 import volumeImg from '../assets/volume.png'
-import {ITrack} from "@/types/track";
-
-interface IProps {
-    track: ITrack | null
-    duration: number
-    currentTime: number
-    volume: number
-    isPlay: boolean
-    setPlayerPlay: Function
-    setPlayerPause: Function
-    setTrack: Function
-    setVolume: Function
-    setDuration: Function
-    setCurrentTime: Function
-}
+import {useTypedSelector} from "@/hooks/useTypedSelector";
+import {usePlayerActions} from "@/hooks/usePlayerActions";
 
 let audio: HTMLAudioElement;
 
-const Player: React.FC<IProps> = ({track, ...rest}) => {
+const Player: React.FC = () => {
+    const {
+        activeTrack: track,
+        isPlay,
+        currentTime,
+        duration,
+        volume
+    } = useTypedSelector(state => state.player)
 
-    if (!track) return <></>
+    const {
+        playerStopAC,
+        playerPlayAC,
+        setVolumeAC,
+        setDurationAC,
+        setCurrentTimeAC
+    } = usePlayerActions()
 
     useEffect(() => {
-        if(!audio) {
+        if (!audio) {
             audio = new Audio()
-            setAudio()
+            if (track) setAudio();
         } else {
             setAudio()
         }
     }, [track])
 
+    useEffect(() => {
+        if(isPlay) {
+            audio.currentTime = currentTime;
+            audio.play()
+        }
+        else audio.pause()
+    }, [isPlay])
+
     const setAudio = () => {
-        audio.src = process.env.NEXT_PUBLIC_API_URL + '/' + track.audio;
-
-        audio.onloadedmetadata = () => rest.setDuration(audio.duration)
-        audio.ontimeupdate = () => rest.setCurrentTime(audio.currentTime)
-
-        audio.volume = rest.volume / 100;
-
-        audio.play();
-    }
-
-    const setTrackHandler = (e: React.MouseEvent<HTMLElement>) => {
-        e.stopPropagation()
-        if (rest.isPlay) {
-            rest.setPlayerPause()
-            audio.pause()
-        } else {
-            rest.setPlayerPlay()
+        if (track) {
+            audio.src = process.env.NEXT_PUBLIC_API_URL + '/' + track.audio;
+            audio.currentTime = currentTime;
+            audio.onloadedmetadata = () => setDurationAC(audio.duration)
+            audio.ontimeupdate = () => {
+                setCurrentTimeAC(audio.currentTime)
+            }
+            audio.volume = volume / 100;
             audio.play()
         }
     }
 
+    const setTrackHandler = () => {
+        if (isPlay) {
+            playerStopAC()
+        } else {
+            playerPlayAC()
+        }
+    }
+
     const onChangeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-        rest.setVolume(Number(e.target.value))
-        audio.volume = Number((rest.volume / 100).toFixed(1))
+        setVolumeAC(Number(e.target.value))
+        audio.volume = Number((volume / 100).toFixed(1))
     }
 
     const onChangeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-        rest.setCurrentTime(Number(e.target.value))
-        audio.currentTime = rest.currentTime;
+        setCurrentTimeAC(Number(e.target.value))
+        audio.currentTime = currentTime;
     }
 
     const mmSsFormat = (value: number): string => {
@@ -73,12 +80,16 @@ const Player: React.FC<IProps> = ({track, ...rest}) => {
         return `${minutes}:${seconds > 9 ? seconds : '0' + seconds}`
     }
 
+    if (!track) {
+        return <></>
+    }
+
     return (
         <div className={styles.container}>
             <div onClick={setTrackHandler}>
-                {rest.isPlay ? <img width={35} src={pauseButton.src} onClick={() => rest.setPlayerPause()}/>
+                {isPlay ? <img width={35} src={pauseButton.src}/>
                     :
-                    <img src={startButton.src} width={35} onClick={() => rest.setPlayerPlay()}/>
+                    <img src={startButton.src} width={35}/>
                 }
             </div>
             <div className={styles.info}>
@@ -89,15 +100,15 @@ const Player: React.FC<IProps> = ({track, ...rest}) => {
                 <input
                     onChange={onChangeCurrentTime}
                     style={{width: '500px'}}
-                    value={rest.currentTime}
-                    min={0} max={rest.duration} type={'range'}/>
-                <div>{mmSsFormat(rest.currentTime)} / {mmSsFormat(rest.duration)}</div>
+                    value={currentTime}
+                    min={0} max={duration} type={'range'}/>
+                <div>{mmSsFormat(currentTime)} / {mmSsFormat(duration)}</div>
             </div>
             <div className={styles.volume}>
                 <img src={volumeImg.src}/>
                 <input
                     onChange={onChangeVolume}
-                    value={rest.volume} min={0} max={100} type={'range'}/>
+                    value={volume} min={0} max={100} type={'range'}/>
             </div>
         </div>
     );

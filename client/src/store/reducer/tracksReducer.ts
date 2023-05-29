@@ -1,7 +1,7 @@
 import {ITracksState, TrackActions, TracksActionTypes} from "@/types/track";
 
 const initialState: ITracksState = {
-    tracksList: [],
+    tracksList: {totalCount: 0, tracks: []},
     error: ''
 }
 

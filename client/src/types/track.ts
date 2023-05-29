@@ -16,7 +16,7 @@ export interface ITrack {
 }
 
 export interface ITracksState {
-    tracksList: ITrack[]
+    tracksList: TracksApiProps
     error: string
 }
 
@@ -27,12 +27,17 @@ export enum TracksActionTypes {
 
 export interface SetTracksAction {
     type: TracksActionTypes.SET_TRACKS
-    payload: ITrack[]
+    payload: TracksApiProps
 }
 
 export interface SetErrorAction {
     type: TracksActionTypes.SET_ERROR
     payload: string
+}
+
+export interface TracksApiProps {
+    totalCount: number
+    tracks: ITrack[]
 }
 
 export type TrackActions = SetTracksAction | SetErrorAction

@@ -1,4 +1,4 @@
-import React, {Dispatch, useState} from 'react';
+import React from 'react';
 import Layout from "@/components/Layout";
 import styles from '../../styles/tracks/tracks.module.css'
 import {useRouter} from "next/router";
@@ -18,7 +18,6 @@ const Tracks = () => {
     const {activeTrack, isPlay} = useTypedSelector(state => state.player);
     const {tracksList} = useTypedSelector(state => state.tracks);
     const dispatch = useDispatch() as NextDispatch;
-    console.log(tracksList);
     const search = async (searchQuery: string) => {
         try {
             await dispatch(await searchTracks(searchQuery))
@@ -41,13 +40,13 @@ const Tracks = () => {
                             </button>
                         </div>
                         <div className={styles.tracks}>
-                            {tracksList?.map(item => (
+                            {tracksList?.tracks.map(item => (
                                 <TrackItem
                                     key={item.id}
                                     track={item}
                                     setTrack={(trackItem: ITrack) => setTrackAC(trackItem)}
-                                    playerPlay={playerPlayAC}
-                                    playerStop={playerStopAC}
+                                    playerPlay={() => playerPlayAC()}
+                                    playerStop={() => playerStopAC()}
                                     isActive={item.id == activeTrack?.id
                                         &&
                                         isPlay}
