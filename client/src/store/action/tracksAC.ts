@@ -12,10 +12,15 @@ export const setErrorAC = (payload: string): SetErrorAction => {
     return {payload, type: TracksActionTypes.SET_ERROR}
 }
 
-export const fetchTracks = () => {
+export const fetchTracks = (offset = 0, limit = 3) => {
     return async (dispatch: Dispatch<TrackActions>)=> {
         try {
-            const {data} = await axios.get(process.env.NEXT_PUBLIC_GET_TRACKS as string)
+            const {data} = await axios.get(process.env.NEXT_PUBLIC_GET_TRACKS as string, {
+                params: {
+                    offset,
+                    count: limit
+                }
+            })
             dispatch(setTracksAC({tracks: data[0], totalCount: data[1]}))
         } catch (e) {
             dispatch(setErrorAC(e as string))

@@ -19,7 +19,10 @@ const Tracks = () => {
     const {activeTrack, isPlay} = useTypedSelector(state => state.player);
     const {tracksList} = useTypedSelector(state => state.tracks);
     const dispatch = useDispatch() as NextDispatch;
-    const [currentPage, setCurrentPage] = useState(1)
+
+    const limit = 3;
+    const pagesCount = Math.ceil(tracksList.totalCount / limit)
+
     const search = async (searchQuery: string) => {
         try {
             await dispatch(await searchTracks(searchQuery))
@@ -56,7 +59,7 @@ const Tracks = () => {
                         </div>
                     </div>
                     <div className={styles.paginator}>
-                        <Pagination pagesCount={10} currentPage={currentPage} setPage={(page: number) => setCurrentPage(page)}/>
+                        <Pagination pagesCount={pagesCount} limit={limit}/>
                     </div>
                 </>
             </Layout>
@@ -71,7 +74,8 @@ export const getServerSideProps
     = wrapper.getServerSideProps(
     (store) =>
         async (x) => {
+            const {page = 1, limit = 3} = x.query
             const NextThunkDispatch = store.dispatch as NextDispatch;
-            await NextThunkDispatch(await fetchTracks())
+            await NextThunkDispatch(await fetchTracks(Number(page) * Number(limit) - Number(limit), Number(limit)))
         })
 

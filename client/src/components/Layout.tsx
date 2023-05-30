@@ -11,8 +11,6 @@ interface IProps {
 
 const Layout: React.FC<IProps> = ({children, title}) => {
 
-
-
     return (
         <>
             <Head>
