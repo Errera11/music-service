@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Layout from "@/components/Layout";
 import styles from '../../styles/tracks/tracks.module.css'
 import {useRouter} from "next/router";
@@ -10,6 +10,7 @@ import {NextDispatch, wrapper} from "@/store";
 import {fetchTracks, searchTracks} from "@/store/action/tracksAC";
 import Search from "@/components/Search";
 import {useDispatch} from "react-redux";
+import Pagination from "@/components/Pagination";
 
 
 const Tracks = () => {
@@ -18,6 +19,7 @@ const Tracks = () => {
     const {activeTrack, isPlay} = useTypedSelector(state => state.player);
     const {tracksList} = useTypedSelector(state => state.tracks);
     const dispatch = useDispatch() as NextDispatch;
+    const [currentPage, setCurrentPage] = useState(1)
     const search = async (searchQuery: string) => {
         try {
             await dispatch(await searchTracks(searchQuery))
@@ -25,7 +27,6 @@ const Tracks = () => {
             console.log(e);
         }
     }
-
     return (
         <>
             <Layout title={'Tracks List'}>
@@ -53,6 +54,9 @@ const Tracks = () => {
                                 />
                             ))}
                         </div>
+                    </div>
+                    <div className={styles.paginator}>
+                        <Pagination pagesCount={10} currentPage={currentPage} setPage={(page: number) => setCurrentPage(page)}/>
                     </div>
                 </>
             </Layout>

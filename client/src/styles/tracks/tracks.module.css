@@ -32,3 +32,9 @@
     align-items: center;
 }
 
+.paginator {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+

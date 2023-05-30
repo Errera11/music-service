@@ -1,0 +1,22 @@
+
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  .page {
+    box-sizing: border-box;
+    background: black;
+    border-radius: 15px;
+    color: white;
+    padding: 5px 10px;
+    margin: 0px 5px;
+    cursor: pointer;
+  }
+  .active {
+    border: solid black 2px;
+    background: white;
+    color: black;
+  }
+}
