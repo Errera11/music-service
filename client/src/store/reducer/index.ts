@@ -3,10 +3,12 @@ import {combineReducers} from "redux";
 import {HYDRATE} from "next-redux-wrapper";
 import {IPlayerState} from "@/types/player";
 import {tracksReducer} from "@/store/reducer/tracksReducer";
+import {albumsReducer} from "@/store/reducer/albumsReducer";
 
 const rootReducer = combineReducers({
     player: playerReducer,
-    tracks: tracksReducer
+    tracks: tracksReducer,
+    albums: albumsReducer
 })
 
 export const reducer = (state: any, action: any): State => {
