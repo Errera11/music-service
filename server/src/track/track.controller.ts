@@ -4,6 +4,8 @@ import {CreateTrackDto} from "./dto/create-track.dto";
 import {CreateTrackCommentDto} from "./dto/create-comment.dto";
 import {FileFieldsInterceptor} from "@nestjs/platform-express";
 import {FileService, FileType} from "../file/file.service";
+import {createAlbumDto} from "./dto/create-album.dto";
+import {createAlbumTrackDto} from "./dto/create-album-track.dto";
 
 
 @Controller('/track')
@@ -24,8 +26,25 @@ export class TrackController {
     async getAllTracks(@Query('count') count,
                        @Query('offset') offset,
                        @Query('search') searchArgs) {
-        if(searchArgs) return await this.trackService.searchTracks(searchArgs);
+        if (searchArgs) return await this.trackService.searchTracks(searchArgs);
         return await this.trackService.getAllTracks(count, offset);
+    }
+
+    @Get('/album')
+    async getAlbums(@Query('limit') limit,
+                    @Query('offset') offset,){
+        return await this.trackService.getAlbums(limit, offset)
+
+    }
+
+    @Get('/album/:id')
+    async getOneAlbum(@Param('id') id: number) {
+        return await this.trackService.getOneAlbums(id)
+    }
+
+    @Get('/albumTracks/:id')
+    async getAlbumTracks(@Param('id') id: number) {
+        return await this.trackService.getAlbumTracks(id)
     }
 
     @Get(':id')
@@ -35,8 +54,8 @@ export class TrackController {
 
     @Delete(':id')
     async deleteOneTrack(@Param('id') id) {
-        const track = await this.trackService.deleteTrack(id)
-        return track;
+        return await this.trackService.deleteTrack(id)
+
     }
 
     @Post('/comment')
@@ -49,5 +68,17 @@ export class TrackController {
         return await this.trackService.incrementTrackListen(id)
     }
 
+    @Post('/album')
+    @UseInterceptors(FileFieldsInterceptor([
+        {name: 'image', maxCount: 1},
+    ]))
+    async createAlbum(@Body() dto: createAlbumDto, @UploadedFiles() files) {
+        return await this.trackService.createAlbum(dto, files.image[0])
+    }
 
+    @Post('/albumTrack')
+    async createAlbumTrack(@Body() dto: createAlbumTrackDto) {
+        console.log(dto);
+        return await this.trackService.createAlbumTrack(dto)
+    }
 }

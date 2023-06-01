@@ -2,18 +2,21 @@ import {Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {TrackSchema} from "./schemas/track.entity";
 import {CommentSchema} from "./schemas/comment.entity";
-import {DeleteResult, Repository, SelectQueryBuilder} from "typeorm";
+import {DeleteResult, Repository} from "typeorm";
 import {CreateTrackDto} from "./dto/create-track.dto";
 import {CreateTrackCommentDto} from "./dto/create-comment.dto";
 import {FileService, FileType} from "../file/file.service";
-
-
+import {AlbumSchema} from "./schemas/album.entity";
+import {AlbumTrackSchema} from "./schemas/album_track.entity";
+import {createAlbumDto} from "./dto/create-album.dto";
 
 type Paginate = [TrackSchema[], number]
 @Injectable()
 export class TrackService {
     constructor(@InjectRepository(TrackSchema) private trackRepository: Repository<TrackSchema>,
                 @InjectRepository(CommentSchema) private commentRepository: Repository<CommentSchema>,
+                @InjectRepository(AlbumSchema) private albumRepository: Repository<AlbumSchema>,
+                @InjectRepository(AlbumTrackSchema) private albumTrackRepository: Repository<AlbumTrackSchema>,
                 private fileService: FileService) {
     }
 
@@ -66,6 +69,41 @@ export class TrackService {
     })
             .getMany();
 
+    }
+
+    createAlbum(dto: createAlbumDto, file): Promise<AlbumSchema> {
+        const imagePath = this.fileService.createFile(FileType.IMAGE, file)
+        return this.albumRepository.save({...dto, image: imagePath})
+    }
+
+    createAlbumTrack(dto): Promise<AlbumTrackSchema> {
+        return this.albumTrackRepository.save(dto)
+    }
+
+    getAlbums(count = 2, offset = 0): Promise<[AlbumSchema[], number]> {
+        return this.albumRepository.findAndCount({
+            skip: offset,
+            take: count
+        });
+    }
+
+    getOneAlbums(id: number): Promise<AlbumSchema> {
+        return this.albumRepository.findOne({where: {id}});
+    }
+
+    getAlbumTracks(id: number) : Promise<TrackSchema[]> {
+        return this.trackRepository.createQueryBuilder()
+            .select('track')
+            .from(TrackSchema, 'track')
+            .where((qb) => {
+                const subQuery = qb
+                    .subQuery()
+                    .select('album_track.trackId')
+                    .from(AlbumTrackSchema, 'album_track')
+                    .where('album_track.albumId = :id', {id})
+                    .getQuery()
+                return 'track.id IN ' + subQuery
+            }).getMany()
     }
 
 }

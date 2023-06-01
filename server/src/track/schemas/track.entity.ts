@@ -1,5 +1,6 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
 import {CommentSchema} from "./comment.entity";
+import {AlbumTrackSchema} from "./album_track.entity";
 
 @Entity({name: 'track'})
 export class TrackSchema {
@@ -26,4 +27,7 @@ export class TrackSchema {
 
     @OneToMany(() => CommentSchema, schema => schema.trackId)
     comments: CommentSchema[]
+
+    @OneToMany(() => AlbumTrackSchema, schema => schema.trackId)
+    albums: AlbumTrackSchema[]
 }

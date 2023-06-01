@@ -7,6 +7,8 @@ import {CommentSchema} from "./track/schemas/comment.entity";
 import {TrackSchema} from "./track/schemas/track.entity";
 import {FileModule} from "./file/file.module";
 import {ServeStaticModule} from "@nestjs/serve-static";
+import {AlbumTrackSchema} from "./track/schemas/album_track.entity";
+import {AlbumSchema} from "./track/schemas/album.entity";
 
 @Module({
     imports: [
@@ -26,7 +28,7 @@ import {ServeStaticModule} from "@nestjs/serve-static";
                 username: configService.get<string>('DB_USERNAME'),
                 password: configService.get<string>('DB_PASSWORD'),
                 database: configService.get<string>('DB_DATABASE'),
-                entities: [CommentSchema, TrackSchema],
+                entities: [CommentSchema, TrackSchema, AlbumTrackSchema, AlbumSchema],
                 synchronize: true,
             }),
         }),
