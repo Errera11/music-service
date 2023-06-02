@@ -4,10 +4,10 @@ import styles from '../styles/components/stepper.module.scss'
 interface IProps {
     activeStep: number
     children?: React.ReactElement
+    steps: string[]
 }
 
-const steps = ['Track Info', 'Download label', 'Download track']
-const Stepper: React.FC<IProps> = ({activeStep, children}) => {
+const Stepper: React.FC<IProps> = ({activeStep, children, steps}) => {
     return (
         <div className={styles.container}>
             <div className={styles.stepper}>

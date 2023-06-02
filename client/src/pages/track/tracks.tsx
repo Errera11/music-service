@@ -11,6 +11,9 @@ import {fetchTracks, searchTracks} from "@/store/action/tracksAC";
 import Search from "@/components/Search";
 import {useDispatch} from "react-redux";
 import Pagination from "@/components/Pagination";
+import axios from "axios";
+import {IAlbumApi} from "@/types/albums";
+import {setAlbumsAC} from "@/store/action/albumsAC";
 
 
 const Tracks = () => {
@@ -77,5 +80,14 @@ export const getServerSideProps
             const {page = 1, limit = 3} = x.query
             const NextThunkDispatch = store.dispatch as NextDispatch;
             await NextThunkDispatch(await fetchTracks(Number(page) * Number(limit) - Number(limit), Number(limit)))
+            const {data} = await axios.get(process.env.NEXT_PUBLIC_GET_ALBUMS as string, {
+                params: {
+                    limit: 10,
+                    offset: 0
+                }
+            })
+            if (!data) return
+            const info: IAlbumApi = {albums: data[0], totalCount: data[1]}
+            await NextThunkDispatch(setAlbumsAC(info))
         })
 

@@ -86,7 +86,7 @@ const TrackPage = ({track}: {track: IServerTrack} ) => {
 };
 
 export const getServerSideProps: GetServerSideProps<Context> = async (context) => {
-    const {data: track} = await axios.get(process.env.NEXT_PUBLIC_GET_TRACKS + '/' +  context.params.id)
+    const {data: track} = await axios.get(process.env.NEXT_PUBLIC_GET_TRACKS + '/' +  context.params?.id)
     return {
         props: {track}
     }

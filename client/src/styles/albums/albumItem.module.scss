@@ -1,0 +1,33 @@
+
+.container {
+  margin: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .info {
+    img {
+      width: 300px;
+      height: 400px;
+      object-fit: cover;
+    }
+  }
+
+  .tracks {
+    height: 500px;
+    overflow: scroll;
+    .container {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+.name {
+  font-size: 40px;
+  margin: 40px 0px;
+}
+
+.description {
+  color: gray;
+}
+
+}

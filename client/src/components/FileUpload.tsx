@@ -8,13 +8,13 @@ interface IProps {
 
 const FileUpload:React.FC<IProps> = ({setFile, children, accept}) => {
     const ref = useRef<HTMLInputElement>(null)
-    // @ts-ignore
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(!e.target.files) return
         setFile(e.target.files[0])
     }
     return (
         <div>
-            <div onClick={() => ref.current.click()}>
+            <div onClick={() => (!ref.current ? -1 : ref.current.click())}>
                 <div style={{margin: '30px 0px', cursor: 'pointer', color: 'blue'}}>
                     {children}
                 </div>

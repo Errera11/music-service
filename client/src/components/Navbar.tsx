@@ -1,5 +1,6 @@
 import React from 'react';
 import {useRouter} from "next/router";
+import Link from "next/link";
 
 const Navbar = () => {
     const router = useRouter()
@@ -11,7 +12,8 @@ const Navbar = () => {
                 </div>
                 <div className={'my'}>
                     <div onClick={() => router.push('/track/tracks')}>My tracks</div>
-                    <div>My albums</div>
+                    <Link style={{textDecoration: 'none', color: 'black'}}
+                        href="/album/albums">My Albums</Link>
                 </div>
             </div>
             <style jsx>
