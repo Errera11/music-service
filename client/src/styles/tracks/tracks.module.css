@@ -1,4 +1,7 @@
-
+.main {
+    box-sizing: border-box;
+    margin: 40px 0px;
+}
 
 .container {
     margin: 20px auto;

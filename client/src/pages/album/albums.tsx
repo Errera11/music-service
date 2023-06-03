@@ -8,6 +8,7 @@ import {useTypedSelector} from "@/hooks/useTypedSelector";
 import Link from "next/link";
 import {setAlbumsAC} from "@/store/action/albumsAC";
 import {useRouter} from "next/router";
+import Pagination from "@/components/Pagination";
 
 const Albums = () => {
     const router = useRouter()
@@ -23,21 +24,23 @@ const Albums = () => {
                                   href={'/album/createAlbum'}>Create Album</Link>
                         </div>
                     </div>
-
                     {!albums.totalCount && <div className={styles.noAlbums}>There is no albums yet!</div>}
                     <div className={styles.albumsContainer}>
-                        {albums.albums?.map(album => <div
-                            onClick={() => router.push('/album/' + album.id)}
-                            className={styles.albumItem}>
-                            <img src={process.env.NEXT_PUBLIC_API_URL + '/' + album.image}/>
-                            <div className={styles.name}>
-                                {album.name}
-                            </div>
-                            <div className={styles.description}>
-                                {album.description}
-                            </div>
-                        </div>)}
+                                {albums.albums?.map(album => <div
+                                    onClick={() => router.push('/album/' + album.id)}
+                                    className={styles.albumItem}>
+                                    <img src={process.env.NEXT_PUBLIC_API_URL + '/' + album.image}/>
+                                    <div className={styles.name}>
+                                        {album.name}
+                                    </div>
+                                    <div className={styles.description}>
+                                        {album.description}
+                                    </div>
+                                </div>)}
                     </div>
+                </div>
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
+                    <Pagination pagesCount={Math.ceil(albums.totalCount / 5)} limit={5}/>
                 </div>
             </div>
         </Layout>
@@ -48,13 +51,13 @@ const Albums = () => {
 export default Albums;
 
 export const getServerSideProps = wrapper.getServerSideProps(
-    (store) => async () => {
+    (store) => async (context) => {
         const dispatch = store.dispatch as NextDispatch
         try {
             const {data} = await axios.get(process.env.NEXT_PUBLIC_GET_ALBUMS as string, {
                 params: {
-                    limit: 10,
-                    offset: 0
+                    limit: context.query.limit,
+                    offset: (context.query?.page - 1) * context.query.limit
                 }
             })
             if (!data) return

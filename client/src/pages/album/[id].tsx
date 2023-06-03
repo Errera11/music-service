@@ -6,8 +6,14 @@ import {IAlbum} from "@/types/albums";
 import styles from '../../styles/albums/albumItem.module.scss'
 import {ITrack} from "@/types/track";
 import TrackItem from "@/components/TrackItem";
+import {usePlayerActions} from "@/hooks/usePlayerActions";
+import {useTypedSelector} from "@/hooks/useTypedSelector";
 
 const Album = ({album, albumTracks}: { album: IAlbum, albumTracks: ITrack[] }) => {
+
+    const {setTrackAC, playerPlayAC, playerStopAC} = usePlayerActions()
+    const {activeTrack, isPlay} = useTypedSelector(state => state.player)
+
     return (
         <Layout title={'Album'}>
             <div className={styles.container}>
@@ -18,10 +24,18 @@ const Album = ({album, albumTracks}: { album: IAlbum, albumTracks: ITrack[] }) =
                 </div>
                 <div className={styles.tracks}>
                     <div className={styles.container}>
-                        {albumTracks.map(track => <div className={styles.track}>
-                            <TrackItem track={track} setTrack={() => 1} playerPlay={() => 1}
-                                       playerStop={() => 1}/>
-                        </div>)}
+                        {albumTracks.length ?
+                            <>
+                                {albumTracks.map(track => <div className={styles.track}>
+                                    <TrackItem
+                                        isActive={track.id == activeTrack?.id && isPlay}
+                                        track={track} setTrack={(track: ITrack) => setTrackAC(track)}
+                                        playerPlay={playerPlayAC}
+                                        playerStop={playerStopAC}/>
+                                </div>)}
+                            </>
+                            :
+                            <div>There is no tracks</div>}
                     </div>
                 </div>
             </div>

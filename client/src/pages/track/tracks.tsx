@@ -36,7 +36,7 @@ const Tracks = () => {
     return (
         <>
             <Layout title={'Tracks List'}>
-                <>
+                <div className={styles.main}>
                     <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '30px 0px'}}>
                         <Search search={search}/></div>
                     <div className={styles.container}>
@@ -64,7 +64,7 @@ const Tracks = () => {
                     <div className={styles.paginator}>
                         <Pagination pagesCount={pagesCount} limit={limit}/>
                     </div>
-                </>
+                </div>
             </Layout>
         </>
     );
@@ -80,12 +80,7 @@ export const getServerSideProps
             const {page = 1, limit = 3} = x.query
             const NextThunkDispatch = store.dispatch as NextDispatch;
             await NextThunkDispatch(await fetchTracks(Number(page) * Number(limit) - Number(limit), Number(limit)))
-            const {data} = await axios.get(process.env.NEXT_PUBLIC_GET_ALBUMS as string, {
-                params: {
-                    limit: 10,
-                    offset: 0
-                }
-            })
+            const {data} = await axios.get(process.env.NEXT_PUBLIC_GET_ALBUMS as string)
             if (!data) return
             const info: IAlbumApi = {albums: data[0], totalCount: data[1]}
             await NextThunkDispatch(setAlbumsAC(info))

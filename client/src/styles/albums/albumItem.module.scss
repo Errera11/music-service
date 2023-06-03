@@ -2,8 +2,7 @@
 .container {
   margin: 50px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  text-align: center;
   .info {
     img {
       width: 300px;
@@ -15,6 +14,7 @@
   .tracks {
     height: 500px;
     overflow: scroll;
+    width: 100%;
     .container {
       display: flex;
       flex-direction: column;
