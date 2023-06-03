@@ -34,6 +34,9 @@ $ npm install
 
 ## Running the app
 
+
+
+
 ```bash
 # development
 $ npm run start
@@ -71,3 +74,11 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## env
+PORT=
+DB_HOST=
+DB_PORT=
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE=
